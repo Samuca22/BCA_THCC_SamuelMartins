@@ -26,13 +26,15 @@ Constellation Automotive group BCA Take-Home Challenge for 2nd stage interview
    - To execute all tests in headed mode:
 
      ```bash
-     npx playwright test
+     npx playwright test        # runs both API and UI projects by default
+     npx playwright test --project=ui-chrome    # or --project=api to limit to one
      ```
 
    - To run a specific test file (example):
 
      ```bash
-     npx playwright test tests/example.spec.js
+     npx playwright test tests/api/tests/example.spec.ts
+     # or tests/ui/tests/example.spec.ts
      ```
 
 4. **View test report**
