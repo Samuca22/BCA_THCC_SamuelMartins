@@ -9,7 +9,7 @@ test('Logout', async ({ page }) => {
     await loginPage.gotoLoginPage()
     await loginPage.login(process.env.VALID_USERNAME, process.env.VALID_PASSWORD)
 
-    await expect(dashboardPage.titleDashboard).toBeVisible();
+    await expect(dashboardPage.headerTitle).toHaveText('Dashboard');
 
     await dashboardPage.logout()
 
