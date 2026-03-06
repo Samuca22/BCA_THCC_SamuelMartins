@@ -8,6 +8,8 @@ export class LoginPage {
         this.usernameRequiredError = page.getByText('Required', { exact: true }).nth(0);
         this.passwordRequiredError = page.getByText('Required', { exact: true }).nth(1);
         this.errorMessageInvalid = page.getByText('Invalid credentials', { exact: true });
+
+        this.titleLogin = page.getByRole('heading', { name: 'Login' });
     }
 
     async gotoLoginPage(){
