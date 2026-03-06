@@ -32,14 +32,14 @@ export default defineConfig({
     // Part A - API tests
     {
       name: 'api',
-      testMatch: 'api/tests/*.spec.{ts,js}',
+      testMatch: 'api/tests/*.spec.js',
       use: { baseURL: process.env.API_BASE_URL },
     },
 
     // Part B - UI tests
     {
       name: 'ui-chrome',
-      testMatch: 'ui/tests/*.spec.{ts,js}',
+      testMatch: 'ui/tests/*.spec.js',
       use: { baseURL: process.env.UI_BASE_URL, ...devices['Desktop Chrome'] },
     }
 

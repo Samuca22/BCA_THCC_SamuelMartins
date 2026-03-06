@@ -2,9 +2,11 @@ export class LoginPage {
     constructor(page){
         this.page = page;
         this.usernameInput = page.getByRole('textbox', { name: 'Username' });
-        this.passwordInput= page.getByRole('textbox', { name: 'Password' });
+        this.passwordInput = page.getByRole('textbox', { name: 'Password' });
         this.loginButton = page.getByRole('button', { name: 'Login' });
-        this.errorMessageRequired = page.getByText('Required', { exact: true });
+
+        this.usernameRequiredError = page.getByText('Required', { exact: true }).nth(0);
+        this.passwordRequiredError = page.getByText('Required', { exact: true }).nth(1);
         this.errorMessageInvalid = page.getByText('Invalid credentials', { exact: true });
     }
 
