@@ -55,32 +55,40 @@ test.only('Add employee and verify in details', async ({page}) => {
     const pimPage = new PimPage(page);
     const addEmployeePage = new AddEmployeePage(page);
     const employeeDetailsPage = new EmployeeDetailsPage(page);
-
+    const dataGenerator = new DataGenerator();
     await loginPage.gotoLoginPage();
     await loginPage.login(process.env.VALID_USERNAME, process.env.VALID_PASSWORD);
-
     await expect(dashboardPage.header.headerTitle).toHaveText('Dashboard');
-
     await dashboardPage.clickSidebarItem('PIM');
-
     await expect(pimPage.header.headerTitle).toContainText('PIM');
 
-    // Click ADD
     await pimPage.clickAddEmployee();
     // Enter Add employee and wait for elements to load
     await addEmployeePage.waitPageFullyLoaded();
 
-    // Create new user by Firstname, Lastname and a unique Employee Id
-    const firstname = 'Samuel';
-    const lastname = 'Martins';
-    // Employee Id must be unique and <= 10 chars
-    const employeeid = Date.now().toString().slice(-6);
-    
-    await addEmployeePage.addEmployee(firstname, lastname, employeeid);
+    // Create a new employee object with random faker data
+    const employeeObj = dataGenerator.generateEmployeeObj();
+    // Add employee from data object
+    await addEmployeePage.addEmployee(
+        employeeObj.firstname, 
+        employeeObj.lastname, 
+        employeeObj.employeeid
+    );
 
-    // Verify we navigated to the employee details page and the full name is shown
+    // Only Id needs to be unique, if already exists, generate a new object and try again
+    if ( await addEmployeePage.errorEmployeeIdExists.isVisible() ) {
+        employeeObj = dataGenerator.generateEmployeeObj();
+        await addEmployeePage.addEmployee(
+            employeeObj.firstname, 
+            employeeObj.lastname, 
+            employeeObj.employeeid
+        );
+    }
+
+    // Verify in the details page the person previously created
     await employeeDetailsPage.waitPageFullyLoaded();
-    await expect(
-        employeeDetailsPage.getEmployeeDetailsNameHeading(firstname, lastname)
-    ).toBeVisible();
+    await expect(employeeDetailsPage.getEmployeeDetailsNameHeading(
+        employeeObj.firstname, 
+        employeeObj.lastname))
+        .toBeVisible();
 });

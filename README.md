@@ -15,6 +15,12 @@ Constellation Automotive group BCA Take-Home Challenge for 2nd stage interview
    npm install
    ```
 
+2. **Install faker library **
+
+``` bash
+   npm install @faker-js/faker
+```
+
 2. **Install Playwright browsers (first time only or after clearing)**
 
    ```bash

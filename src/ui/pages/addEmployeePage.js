@@ -1,7 +1,6 @@
 import { expect } from '@playwright/test';
 import {HeaderComponent} from '../components/HeaderComponent';
 
-
 export class AddEmployeePage {
     constructor(page) {
         this.page = page;
@@ -10,16 +9,13 @@ export class AddEmployeePage {
 
         this.inputFirstName = page.getByRole('textbox', { name: 'First Name' });
         this.inputLastName = page.getByRole('textbox', { name: 'Last Name' });
-        this.inputEmployeeId = page
-            .locator('.oxd-input-group')
-            .filter({ hasText: 'Employee Id' })
-            .locator('input')
-            .first();
+        this.inputEmployeeId = page.locator('.oxd-input-group').filter({ hasText: 'Employee Id' }).locator('input').first();
 
         this.buttonSave = page.getByRole('button', {name: 'Save'});
         this.toastSuccess = page.locator('#oxd-toaster_1').getByText('SuccessSuccessfully Saved');
         this.cardLoader = page.locator('.oxd-form-loader');
 
+        this.errorEmployeeIdExists = page.getByText('Employee Id already exists');
     }
 
     async waitPageFullyLoaded(){
