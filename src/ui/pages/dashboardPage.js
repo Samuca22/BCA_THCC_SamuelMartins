@@ -9,11 +9,10 @@ export class DashboardPage {
         this.dashboardGrid = page.locator('div.orangehrm-dashboard-grid');
     }
 
-    
+    async gotoDashboardPage(){
+        await this.page.goto('/');
+    }
     async getSidebarItemNames(){
-        await this.sidebar.waitFor({ state: 'visible', timeout: 10000 });
-        await this.sidebarMenuItem.first().waitFor({ state: 'visible', timeout: 5000 });
-        
         const namesArray = await this.sidebarMenuItem.allTextContents();
         return namesArray.map(name => name.trim()).filter(Boolean);
     }

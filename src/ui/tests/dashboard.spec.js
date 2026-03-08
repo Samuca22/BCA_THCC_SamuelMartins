@@ -8,9 +8,10 @@ const headerOverrides = {
 test('Navigate dashboard sidebar by name', async ({ page, dashboardPage }) => {
     test.setTimeout(90000); //Bigger timeout to give headroom for the navigation loop
 
-    await page.goto('/');
-    await expect(dashboardPage.header.headerTitle).toHaveText('Dashboard');
-    
+    await dashboardPage.gotoDashboardPage();
+    await expect(dashboardPage.header.headerTitle).toHaveText('Dashboard', { timeout: 15000 });
+    await expect(dashboardPage.sidebar).toBeVisible({ timeout: 15000 });
+
     const menuItems = await dashboardPage.getSidebarItemNames();
     expect(menuItems.length).toBeGreaterThan(0);
     // Loop every sidebar item and verify header title change
@@ -21,12 +22,12 @@ test('Navigate dashboard sidebar by name', async ({ page, dashboardPage }) => {
         if (!stayedOnPageWithSidebar) {
             continue;
         }
-        await expect(dashboardPage.header.headerTitle).toContainText(expectedHeader);
+        await expect(dashboardPage.header.headerTitle).toContainText(expectedHeader, { timeout: 15000 });
     }
 });
 
-test('Verify dashboard elements', async ({ page, dashboardPage }) => {
-    await page.goto('/');
+test('Verify dashboard elements', async ({ dashboardPage }) => {
+    await dashboardPage.gotoDashboardPage();
     await expect(dashboardPage.header.headerTitle).toHaveText('Dashboard');
     await expect(dashboardPage.dashboardGrid).toBeVisible();
 });

@@ -15,18 +15,6 @@ export class AddEmployeePage {
         this.errorEmployeeIdExists = page.getByText('Employee Id already exists');
     }
 
-    // TODO remove and use promise logic inside test specs
-    async waitPageFullyLoaded(){
-        await expect(this.cardTitle).toBeVisible({ timeout: 10000 });
-
-        await expect(this.inputFirstName).toBeVisible();
-        await expect(this.inputFirstName).toBeEnabled();
-        await expect(this.inputLastName).toBeEnabled();
-        await expect(this.inputEmployeeId).toBeEnabled();
-        // Waits for loader to be hidden
-        await expect(this.cardLoader).toBeHidden();
-    }
-
     async addEmployee(firstname, lastName, employeeid){
         await this.inputFirstName.fill(firstname);
         await this.inputLastName.fill(lastName);

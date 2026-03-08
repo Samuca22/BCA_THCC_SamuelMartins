@@ -11,18 +11,21 @@ export class LoginPage {
     }
 
     async gotoLoginPage(){
-        await this.page.goto(process.env.UI_BASE_URL + 'web/index.php/auth/login');
+        const base = process.env.UI_BASE_URL;
+        const url = base ? `${base.replace(/\/$/, '')}/web/index.php/auth/login` : '/web/index.php/auth/login';
+        await this.page.goto(url);
     }
 
     async login(username, password){
+        await this.usernameInput.click();
         await this.usernameInput.fill(username);
+        await this.passwordInput.click();
         await this.passwordInput.fill(password);
         await this.submit();
+        await this.page.waitForURL(/\/(dashboard|auth\/login)/, { timeout: 15000 });
     }
 
     async submit(){
         await this.loginButton.click();
-        // Wait for post-login navigation so the next assertion has a stable URL
-        await this.page.waitForURL(/\/(dashboard|auth\/login)/, { timeout: 15000 });
     }
 }

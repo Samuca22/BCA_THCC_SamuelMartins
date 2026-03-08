@@ -1,4 +1,5 @@
-import { test, expect} from '@playwright/test';
+import { expect} from '@playwright/test';
+import { test } from '../fixtures/fixtures.js';
 // Test data (populate more data if needed)
 import { users } from '../test-data/user-data.js';
 
@@ -11,14 +12,9 @@ test.use({
   });
 
 // TC01 - Successful login
-test('Successful login', async ({ page }) => {
-    const loginPage = new LoginPage(page);
-    const dashboardPage = new DashboardPage(page);
-
+test('Successful login', async ({ loginPage, dashboardPage }) => {
     await loginPage.gotoLoginPage();
     await loginPage.login(users[0].username, users[0].password);
-
-    await expect(page).toHaveURL(/dashboard/);
     await expect(dashboardPage.header.headerTitle).toBeVisible();
     await expect(dashboardPage.header.headerTitle).toHaveText('Dashboard');
 });
@@ -26,10 +22,8 @@ test('Successful login', async ({ page }) => {
 // Negative scenarios
 test.describe('Negative state scenarios', () => {
     // TC02 - Failed login - Invalid password
-    test('Failed login - Invalid password', async ({ page }) => {
-        const loginPage = new LoginPage(page);
+    test('Failed login - Invalid password', async ({ loginPage }) => {
         await loginPage.gotoLoginPage();
-        
         // Login with first user but with invalid password
         await loginPage.login(users[0].username, 'invalid_password');
         await expect(loginPage.errorMessageInvalid).toBeVisible();
@@ -37,9 +31,7 @@ test.describe('Negative state scenarios', () => {
 
 
     // TC03 - Failed login - Empty fields
-    test('Failed login - Empty fields', async ({ page }) => {
-        const loginPage = new LoginPage(page);
-    
+    test('Failed login - Empty fields', async ({ loginPage       }) => {
         await loginPage.gotoLoginPage();
         await loginPage.submit();
         

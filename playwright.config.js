@@ -43,6 +43,7 @@ export default defineConfig({
     {
       name: 'setup',
       testMatch: 'ui/fixtures/auth.setup.js',
+      use: { baseURL: process.env.UI_BASE_URL },
     },
     {
       name: 'ui-chrome',

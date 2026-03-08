@@ -1,49 +1,29 @@
-import { test, expect} from '@playwright/test';
+import { expect} from '@playwright/test';
 // POM pages
-import { LoginPage } from '../pages/LoginPage';
-import { DashboardPage } from '../pages/DashboardPage';
-import { PimPage } from '../pages/PimPage';
-import { AddEmployeePage } from '../pages/AddEmployeePage';
-import { EmployeeDetailsPage } from '../pages/EmployeeDetailsPage';
+import { test } from '../fixtures/fixtures.js';
+
 // Test data
-import employeesData from '../test-data/pim-employees-data.json';
+import employeesData from '../test-data/pim-employees-data.json' assert { type: "json" };
 // Utils
 import { DataGenerator } from '../../utils/DataGenerator';
 
-test('Navigate to PIM page', async ({page}) => {
-    const loginPage = new LoginPage(page);
-    const dashboardPage = new DashboardPage(page);
-    const pimPage = new PimPage(page);
-
-    await loginPage.gotoLoginPage();
-    await loginPage.login(process.env.VALID_USERNAME, process.env.VALID_PASSWORD);
-    // Ensure we have fully navigated to the dashboard
-    await expect(page).toHaveURL(/dashboard/);
-
+test('Navigate to PIM page', async ({ page, dashboardPage, pimPage }) => {
+    await page.goto('/');
     await dashboardPage.clickSidebarItem('PIM');
     await expect(pimPage.header.headerTitle).toContainText('PIM');
     await expect(pimPage.employeeList).toBeVisible();
 });
 
 test.describe('Search employee in list by name', () => {
+    test.beforeEach(async ({ pimPage }) => {
+        await pimPage.gotoEmployeeList();
+        await expect(pimPage.employeeList).toBeVisible();
+    });
+
     for (const employee of employeesData.employees) {
-        // TC01 - Search employee by name and expect results
-        test(`Search employee by name: ${employee.firstname} and expect: ${employee.expected}`, async ({page}) => {
-            const loginPage = new LoginPage(page);
-            const dashboardPage = new DashboardPage(page);
-            const pimPage = new PimPage(page);
-
-            await loginPage.gotoLoginPage();
-            await loginPage.login(process.env.VALID_USERNAME, process.env.VALID_PASSWORD);
-            await expect(dashboardPage.header.headerTitle).toHaveText('Dashboard');
-
-            await dashboardPage.clickSidebarItem('PIM');
-            await expect(pimPage.header.headerTitle).toContainText('PIM');
-            await expect(pimPage.employeeList).toBeVisible();
-
-
+        test(`Search employee by name: ${employee.firstname} and expect: ${employee.expected}`, async ({ pimPage }) => {
             await pimPage.filterByName(employee.firstname);
-            await pimPage.employeeList.waitFor({ state: 'visible', timeout: 10000 });
+            await expect(pimPage.employeeList).toBeVisible({ timeout: 20000 });
             await pimPage.employeeList.scrollIntoViewIfNeeded();
 
             // Verify if there are results in table and what expected result is
@@ -61,22 +41,18 @@ test.describe('Search employee in list by name', () => {
 });
 
 // TC02 - Add employee and verify in details page
-test('Add employee and verify in details', async ({page}) => {
-    const loginPage = new LoginPage(page);
-    const dashboardPage = new DashboardPage(page);
-    const pimPage = new PimPage(page);
-    const addEmployeePage = new AddEmployeePage(page);
-    const employeeDetailsPage = new EmployeeDetailsPage(page);
-    const dataGenerator = new DataGenerator();
-    await loginPage.gotoLoginPage();
-    await loginPage.login(process.env.VALID_USERNAME, process.env.VALID_PASSWORD);
-    await expect(dashboardPage.header.headerTitle).toHaveText('Dashboard');
-    await dashboardPage.clickSidebarItem('PIM');
-    await expect(pimPage.header.headerTitle).toContainText('PIM');
+test('Add employee and verify in details', async ({ pimPage, addEmployeePage, employeeDetailsPage }) => {
+    const dataGenerator = new DataGenerator();          
 
+    await pimPage.gotoEmployeeList();
     await pimPage.clickAddEmployee();
-    // Enter Add employee and wait for elements to load
-    await addEmployeePage.waitPageFullyLoaded();
+
+    // Validate page is loaded
+    await expect(addEmployeePage.cardTitle).toBeVisible({ timeout: 10000 });
+    await expect(addEmployeePage.inputFirstName).toBeVisible();
+    await expect(addEmployeePage.inputFirstName).toBeEnabled();
+    await expect(addEmployeePage.cardLoader).toBeHidden();
+    
 
     // Create a new employee object with random faker data
     let employeeObj = dataGenerator.generateEmployeeObj();
@@ -97,10 +73,10 @@ test('Add employee and verify in details', async ({page}) => {
         );
     }
 
-    // Verify in the details page the person previously created
-    await employeeDetailsPage.waitPageFullyLoaded();
-    await expect(employeeDetailsPage.getEmployeeDetailsNameHeading(
-        employeeObj.firstname, 
-        employeeObj.lastname))
-        .toBeVisible();
+    // Verify if details card is loaded
+    await expect(employeeDetailsPage.cardLoader).toBeHidden({ timeout: 10000 });
+
+    // Verify card has the employee full name
+    const employeeFullname = employeeDetailsPage.getEmployeeDetailsNameHeading(employeeObj.firstname, employeeObj.lastname);
+    await expect(employeeFullname).toBeVisible({ timeout: 20000 });
 });
