@@ -15,6 +15,7 @@ export class AddEmployeePage {
         this.errorEmployeeIdExists = page.getByText('Employee Id already exists');
     }
 
+    // TODO remove and use promise logic inside test specs
     async waitPageFullyLoaded(){
         await expect(this.cardTitle).toBeVisible({ timeout: 10000 });
 

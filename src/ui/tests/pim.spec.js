@@ -27,6 +27,7 @@ test('Navigate to PIM page', async ({page}) => {
 
 test.describe('Search employee in list by name', () => {
     for (const employee of employeesData.employees) {
+        // TC01 - Search employee by name and expect results
         test(`Search employee by name: ${employee.firstname} and expect: ${employee.expected}`, async ({page}) => {
             const loginPage = new LoginPage(page);
             const dashboardPage = new DashboardPage(page);
@@ -55,9 +56,11 @@ test.describe('Search employee in list by name', () => {
                 await expect(pimPage.getEmployeeRow(employee.firstname)).toBeVisible();
             }
         });
+
     }
 });
 
+// TC02 - Add employee and verify in details page
 test('Add employee and verify in details', async ({page}) => {
     const loginPage = new LoginPage(page);
     const dashboardPage = new DashboardPage(page);

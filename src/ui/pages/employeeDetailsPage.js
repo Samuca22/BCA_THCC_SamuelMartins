@@ -9,6 +9,7 @@ export class EmployeeDetailsPage {
         this.employeeName = page.locator('.orangehrm-edit-employee-name');
     }
 
+    // TODO remove and use promise logic inside test specs
     async waitPageFullyLoaded(){
         await expect(this.employeeName).toBeVisible();
         await expect(this.cardLoader).toBeHidden();

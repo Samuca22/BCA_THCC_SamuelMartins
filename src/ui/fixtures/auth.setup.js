@@ -1,11 +1,10 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
-
 import { test as setup, expect } from '@playwright/test';
-
 import { users } from '../test-data/user-data.js';
 import { LoginPage } from '../pages/LoginPage.js';
 import { DashboardPage } from '../pages/DashboardPage.js';
+
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const authFile = path.join(__dirname, '../../../playwright/.auth/user.json');
