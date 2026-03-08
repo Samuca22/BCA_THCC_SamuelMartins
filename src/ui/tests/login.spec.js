@@ -1,14 +1,14 @@
 import { test, expect} from '@playwright/test';
 import { LoginPage } from '../pages/LoginPage';
 import { DashboardPage } from '../pages/DashboardPage';
-
+import { defaultUser } from '../test-data/user-data.js';
 
 test('Successful login', async ({ page }) => {
     const loginPage = new LoginPage(page);
     const dashboardPage = new DashboardPage(page);
 
     await loginPage.gotoLoginPage();
-    await loginPage.login(process.env.VALID_USERNAME, process.env.VALID_PASSWORD);
+    await loginPage.login(defaultUser.username[0], defaultUser.password[0]);
 
     await expect(page).toHaveURL(/dashboard/);
     await expect(dashboardPage.header.headerTitle).toHaveText('Dashboard');
@@ -19,7 +19,7 @@ test('Failed login - Invalid password', async ({ page }) => {
     const loginPage = new LoginPage(page);
 
     await loginPage.gotoLoginPage();
-    await loginPage.login(process.env.VALID_USERNAME, 'invalid_password');
+    await loginPage.login(defaultUser.username, 'invalid_password');
 
     await expect(loginPage.errorMessageInvalid).toBeVisible();
 });
