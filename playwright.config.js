@@ -36,11 +36,21 @@ export default defineConfig({
       use: { baseURL: process.env.API_BASE_URL },
     },
 
+    
     // Part B - UI tests
+    {
+      name: 'setup',
+      testMatch: 'ui/tests/auth.setup.js',
+    },
     {
       name: 'ui-chrome',
       testMatch: 'ui/tests/*.spec.js',
-      use: { baseURL: process.env.UI_BASE_URL, ...devices['Desktop Chrome'] },
+      use: { 
+        baseURL: process.env.UI_BASE_URL, 
+        ...devices['Desktop Chrome'],
+        storageState: path.join(__dirname, './playwright/.auth/user.json'),
+      },
+      dependencies: ['setup'],
     }
 
     /* Test against mobile viewports. */
