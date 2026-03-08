@@ -1,35 +1,49 @@
 import { test, expect} from '@playwright/test';
-import { LoginPage } from '../pages/LoginPage';
-import { DashboardPage } from '../pages/DashboardPage';
-import { defaultUser } from '../test-data/user-data.js';
+// Test data (populate more data if needed)
+import { users } from '../test-data/user-data.js';
 
+// Override tests to start in new browser context (without auth storage)
+test.use({
+    storageState: {
+      cookies: [],
+      origins: []
+    }
+  });
+
+// TC01 - Successful login
 test('Successful login', async ({ page }) => {
     const loginPage = new LoginPage(page);
     const dashboardPage = new DashboardPage(page);
 
     await loginPage.gotoLoginPage();
-    await loginPage.login(defaultUser.username[0], defaultUser.password[0]);
+    await loginPage.login(users[0].username, users[0].password);
 
     await expect(page).toHaveURL(/dashboard/);
+    await expect(dashboardPage.header.headerTitle).toBeVisible();
     await expect(dashboardPage.header.headerTitle).toHaveText('Dashboard');
 });
 
 // Negative scenarios
-test('Failed login - Invalid password', async ({ page }) => {
-    const loginPage = new LoginPage(page);
+test.describe('Negative state scenarios', () => {
+    // TC02 - Failed login - Invalid password
+    test('Failed login - Invalid password', async ({ page }) => {
+        const loginPage = new LoginPage(page);
+        await loginPage.gotoLoginPage();
+        
+        // Login with first user but with invalid password
+        await loginPage.login(users[0].username, 'invalid_password');
+        await expect(loginPage.errorMessageInvalid).toBeVisible();
+    });
 
-    await loginPage.gotoLoginPage();
-    await loginPage.login(defaultUser.username, 'invalid_password');
 
-    await expect(loginPage.errorMessageInvalid).toBeVisible();
-});
-
-test('Failed login - Empty fields', async ({ page }) => {
-    const loginPage = new LoginPage(page);
-
-    await loginPage.gotoLoginPage();
-    await loginPage.submit();
+    // TC03 - Failed login - Empty fields
+    test('Failed login - Empty fields', async ({ page }) => {
+        const loginPage = new LoginPage(page);
     
-    await expect(loginPage.usernameRequiredError).toBeVisible();
-    await expect(loginPage.passwordRequiredError).toBeVisible();
+        await loginPage.gotoLoginPage();
+        await loginPage.submit();
+        
+        await expect(loginPage.usernameRequiredError).toBeVisible();
+        await expect(loginPage.passwordRequiredError).toBeVisible();
+    });
 });

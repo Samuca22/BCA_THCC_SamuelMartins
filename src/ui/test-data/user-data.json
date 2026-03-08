@@ -1,9 +1,0 @@
-{
-    "_comment": "For .env values use user-data.js instead (import userData or defaultUser from './test-data/user-data.js')",
-    "users": [
-        {
-            "username": "from .env VALID_USERNAME",
-            "password": "from .env VALID_PASSWORD"
-        }
-    ]
-}

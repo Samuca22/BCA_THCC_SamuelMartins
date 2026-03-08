@@ -5,7 +5,7 @@ import { PimPage } from '../pages/PimPage';
 import { AddEmployeePage } from '../pages/AddEmployeePage';
 import { EmployeeDetailsPage } from '../pages/EmployeeDetailsPage';
 
-export const loginFixture = base.extend({
+export const test = base.extend({
     loginPage: async ({ page }, use) => {
         await use(new LoginPage(page));
     },
