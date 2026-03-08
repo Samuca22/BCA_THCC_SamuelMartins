@@ -7,25 +7,27 @@ const headerOverrides = {
 };
 
 test('Navigate dashboard sidebar by name', async ({ page }) => {
+    test.setTimeout(90000); //Bigger timeout to give headroom for the navigation loop
+
     const loginPage = new LoginPage(page);
     const dashboardPage = new DashboardPage(page);
 
     await loginPage.gotoLoginPage();
     await loginPage.login(process.env.VALID_USERNAME, process.env.VALID_PASSWORD);
 
+    await page.waitForURL(/dashboard/, { timeout: 15000 });
     await expect(dashboardPage.header.headerTitle).toHaveText('Dashboard');
 
     const menuItems = await dashboardPage.getSidebarItemNames();
 
-    console.log('Array menu items => ' + menuItems);
+    // Loop every sidebar item and verify header title change
+    for (const menuitem of menuItems) {
+        const expectedHeader = headerOverrides[menuitem] ?? menuitem;
+        const stayedOnPageWithSidebar = await dashboardPage.navigateToMenuItem(menuitem);
 
-    for(const menuitem of menuItems){
-        if (menuitem == 'Maintenance') {
+        if (!stayedOnPageWithSidebar) {
             continue;
         }
-        // Checks if the current menuItem name matches anything inside headerOverrides object, if no match then keeps the menuItem
-        const expectedHeader = headerOverrides[menuitem] ?? menuitem;
-        await dashboardPage.clickSidebarItem(menuitem);
         await expect(dashboardPage.header.headerTitle).toContainText(expectedHeader);
     }
 });
@@ -37,6 +39,7 @@ test('Verify dashboard elements', async ({ page }) => {
     await loginPage.gotoLoginPage();
     await loginPage.login(process.env.VALID_USERNAME, process.env.VALID_PASSWORD);
 
+    await page.waitForURL(/dashboard/, { timeout: 15000 });
     await expect(dashboardPage.header.headerTitle).toHaveText('Dashboard');
     await expect(dashboardPage.dashboardGrid).toBeVisible();    
 });

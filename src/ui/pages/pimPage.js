@@ -9,6 +9,7 @@ export class PimPage {
         this.inputFilterEmployeeName = page.locator('.oxd-input-group').filter({ hasText: 'Employee Name' }).locator('input');
         this.buttonSearch = page.getByRole('button', { name: 'Search' });
         this.buttonAdd = page.getByRole('button', {name: 'Add'});
+        this.toastNoResultsFound = page.locator('#oxd-toaster_1').getByText('No Records Found');
     }
 
     async filterByName(name) {
@@ -18,6 +19,10 @@ export class PimPage {
 
     async clickAddEmployee(){
         await this.buttonAdd.click();
+    }
+    
+    async getEmployeeRowCount(name){
+        return await this.employeeListRowGroup.getByRole('row').filter({ hasText: name }).count();
     }
 
     getEmployeeRow(name){

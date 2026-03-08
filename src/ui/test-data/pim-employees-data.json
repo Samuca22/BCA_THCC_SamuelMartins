@@ -1,0 +1,28 @@
+{
+    "employees": [
+        {
+            "firstname": "John",
+            "lastname": "Doe",
+            "employeeId": "00001",
+            "expected": "results-found"
+        },
+        {
+            "firstname": "Jane",
+            "lastname": "Smith",
+            "employeeId": "00002",
+            "expected": "no-results"
+        },
+        {
+            "firstname": "Sam",
+            "lastname": "Mar",
+            "employeeId": "00003",
+            "expected": "results-found"
+        },
+        {
+            "firstname": "Invalid",
+            "lastname": "Invalid",
+            "employeeId": "00004",
+            "expected": "no-results"
+        }
+    ]
+}

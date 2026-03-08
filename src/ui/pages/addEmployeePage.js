@@ -6,15 +6,12 @@ export class AddEmployeePage {
         this.page = page;
         this.header = new HeaderComponent(page);
         this.cardTitle = page.getByRole('heading', { name: 'Add Employee' });
-
         this.inputFirstName = page.getByRole('textbox', { name: 'First Name' });
         this.inputLastName = page.getByRole('textbox', { name: 'Last Name' });
         this.inputEmployeeId = page.locator('.oxd-input-group').filter({ hasText: 'Employee Id' }).locator('input').first();
-
         this.buttonSave = page.getByRole('button', {name: 'Save'});
-        this.toastSuccess = page.locator('#oxd-toaster_1').getByText('SuccessSuccessfully Saved');
+        this.toastSuccess = page.locator('#oxd-toaster_1').getByText('Successfully Saved');
         this.cardLoader = page.locator('.oxd-form-loader');
-
         this.errorEmployeeIdExists = page.getByText('Employee Id already exists');
     }
 

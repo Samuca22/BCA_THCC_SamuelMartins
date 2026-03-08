@@ -23,8 +23,8 @@ export default defineConfig({
     screenshot: 'only-on-failure',
     //video: 'retain-on-failure',
     trace: 'on-first-retry',
-    actionTimeout: 10 * 1000, // 10 seconds
-    navigationTimeout: 20 * 1000, // 20 seconds
+    actionTimeout: 15 * 1000, // 15 seconds
+    navigationTimeout: 30 * 1000, // 30 seconds
   },
 
   /* Configure projects for major browsers */

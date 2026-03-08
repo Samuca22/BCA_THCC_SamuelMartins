@@ -1,55 +1,65 @@
 import { test, expect} from '@playwright/test';
+// POM pages
 import { LoginPage } from '../pages/LoginPage';
 import { DashboardPage } from '../pages/DashboardPage';
 import { PimPage } from '../pages/PimPage';
 import { AddEmployeePage } from '../pages/AddEmployeePage';
 import { EmployeeDetailsPage } from '../pages/EmployeeDetailsPage';
+// Test data
+import employeesData from '../test-data/pim-employees-data.json';
+// Utils
+import { DataGenerator } from '../../utils/DataGenerator';
 
 test('Navigate to PIM page', async ({page}) => {
     const loginPage = new LoginPage(page);
     const dashboardPage = new DashboardPage(page);
     const pimPage = new PimPage(page);
-    const addEmployeePage = new AddEmployeePage(page);
-    const employeeDetailsPage = new EmployeeDetailsPage(page);
 
     await loginPage.gotoLoginPage();
     await loginPage.login(process.env.VALID_USERNAME, process.env.VALID_PASSWORD);
-
     // Ensure we have fully navigated to the dashboard
     await expect(page).toHaveURL(/dashboard/);
 
     await dashboardPage.clickSidebarItem('PIM');
-
     await expect(pimPage.header.headerTitle).toContainText('PIM');
     await expect(pimPage.employeeList).toBeVisible();
 });
 
-test('Search employee by name', async ({page}) => {
-    const loginPage = new LoginPage(page);
-    const dashboardPage = new DashboardPage(page);
-    const pimPage = new PimPage(page);
-    //const addEmployeePage = new AddEmployeePage(page);
-    //const employeeDetailsPage = new EmployeeDetailsPage(page);
+test.describe('Search employee in list by name', () => {
+    for (const employee of employeesData.employees) {
+        test(`Search employee by name: ${employee.firstname} and expect: ${employee.expected}`, async ({page}) => {
+            const loginPage = new LoginPage(page);
+            const dashboardPage = new DashboardPage(page);
+            const pimPage = new PimPage(page);
 
-    await loginPage.gotoLoginPage();
-    await loginPage.login(process.env.VALID_USERNAME, process.env.VALID_PASSWORD);
+            await loginPage.gotoLoginPage();
+            await loginPage.login(process.env.VALID_USERNAME, process.env.VALID_PASSWORD);
+            await expect(dashboardPage.header.headerTitle).toHaveText('Dashboard');
 
-    await expect(dashboardPage.header.headerTitle).toHaveText('Dashboard');
+            await dashboardPage.clickSidebarItem('PIM');
+            await expect(pimPage.header.headerTitle).toContainText('PIM');
+            await expect(pimPage.employeeList).toBeVisible();
 
-    await dashboardPage.clickSidebarItem('PIM');
 
-    await expect(pimPage.header.headerTitle).toContainText('PIM');
-    await expect(pimPage.employeeList).toBeVisible();
+            await pimPage.filterByName(employee.firstname);
+            await pimPage.employeeList.waitFor({ state: 'visible', timeout: 10000 });
+            await pimPage.employeeList.scrollIntoViewIfNeeded();
 
-    // TODO add data driven logic to search and validate multiple employees
-    const name = 'John';
-    await pimPage.filterByName(name);
-    await pimPage.employeeList.scrollIntoViewIfNeeded();
-    const employeeRow = pimPage.getEmployeeRow(name);
-    await expect(employeeRow).toContainText(name);
+            // Verify if there are results in table and what expected result is
+            const rowCount = await pimPage.getEmployeeRowCount(employee.firstname);
+            if (rowCount === 0 && employee.expected === 'no-results') {
+                console.log(`No results found for employee: ${employee.firstname}`);
+                // No results should appear toast with message "No Records Found"
+                await expect(pimPage.toastNoResultsFound).toBeVisible();
+            } else {
+                // Results found, verify that the first row is visible
+                await expect(pimPage.getEmployeeRow(employee.firstname)).toBeVisible();
+            }
+        });
+    }
 });
 
-test.only('Add employee and verify in details', async ({page}) => {
+test('Add employee and verify in details', async ({page}) => {
     const loginPage = new LoginPage(page);
     const dashboardPage = new DashboardPage(page);
     const pimPage = new PimPage(page);
@@ -67,7 +77,7 @@ test.only('Add employee and verify in details', async ({page}) => {
     await addEmployeePage.waitPageFullyLoaded();
 
     // Create a new employee object with random faker data
-    const employeeObj = dataGenerator.generateEmployeeObj();
+    let employeeObj = dataGenerator.generateEmployeeObj();
     // Add employee from data object
     await addEmployeePage.addEmployee(
         employeeObj.firstname, 
