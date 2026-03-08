@@ -2,7 +2,9 @@
 import { defineConfig, devices } from '@playwright/test';
 import dotenv from 'dotenv';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: path.resolve(__dirname, '.env') });
 
 export default defineConfig({
@@ -40,7 +42,7 @@ export default defineConfig({
     // Part B - UI tests
     {
       name: 'setup',
-      testMatch: 'ui/tests/auth.setup.js',
+      testMatch: 'ui/fixtures/auth.setup.js',
     },
     {
       name: 'ui-chrome',
@@ -48,7 +50,7 @@ export default defineConfig({
       use: { 
         baseURL: process.env.UI_BASE_URL, 
         ...devices['Desktop Chrome'],
-        storageState: path.join(__dirname, './playwright/.auth/user.json'),
+        storageState: path.join(__dirname, 'playwright/.auth/user.json'),
       },
       dependencies: ['setup'],
     }

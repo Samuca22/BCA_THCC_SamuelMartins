@@ -2,8 +2,8 @@
 export const userData = {
   users: [
     {
-      username: process.env.VALID_USERNAME,
-      password: process.env.VALID_PASSWORD,
+      username: 'Admin',
+      password: 'admin123',
     },
     {
       username: 'invalid_username',
