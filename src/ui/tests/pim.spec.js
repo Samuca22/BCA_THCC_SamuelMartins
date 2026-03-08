@@ -48,7 +48,6 @@ test.describe('Search employee in list by name', () => {
             // Verify if there are results in table and what expected result is
             const rowCount = await pimPage.getEmployeeRowCount(employee.firstname);
             if (rowCount === 0 && employee.expected === 'no-results') {
-                console.log(`No results found for employee: ${employee.firstname}`);
                 // No results should appear toast with message "No Records Found"
                 await expect(pimPage.toastNoResultsFound).toBeVisible();
             } else {
