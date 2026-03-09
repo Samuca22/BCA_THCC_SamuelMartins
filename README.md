@@ -18,7 +18,7 @@ Constellation Automotive group BCA Take-Home Challenge for 2nd stage interview
 2. **Install ajv library for schema validation **
 
    ``` bash
-      npm install ajv
+      npm install ajv ajv-formats
    ```
 
 2. **Install faker library **
