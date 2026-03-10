@@ -9,4 +9,11 @@ export class DataGenerator {
             lastname: faker.person.lastName()
         }
     }
+
+    generateUserAPIObj(){
+        return {
+            name: faker.person.firstName(),
+            job: faker.person.jobTitle()
+        }
+    }
 }

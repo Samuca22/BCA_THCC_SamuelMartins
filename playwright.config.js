@@ -35,7 +35,13 @@ export default defineConfig({
     {
       name: 'api',
       testMatch: 'api/tests/*.spec.js',
-      use: { baseURL: process.env.API_BASE_URL },
+      use: { 
+        baseURL: process.env.API_BASE_URL,
+        extraHTTPHeaders: {
+          'Content-Type': 'application/json',
+          'x-api-key': process.env.API_KEY ?? ''
+        }
+       },
     },
 
     

@@ -2,17 +2,17 @@ import { test, expect } from '@playwright/test';
 import { userSchema } from '../schemas/user.schema.js';
 import { usersListSchema } from '../schemas/userList.schema.js';
 import { validateSchema } from '../../utils/SchemaValidator.js';
+import { UserClient } from '../clients/userClient.js';
+import { userPayloadBuilder } from '../builders/userPayloadBuilder.js';
+import { DataGenerator } from '../../utils/DataGenerator.js';
+
 
 // GET - Users API tests with manual strcture validations
-test.describe('GET - User API - Manual structure validations', () => {
+test.describe('GET - User API - MANUAL structure validations', () => {
     //TC01 - GET users list
     test('Get users list - Manual structure validations', async ({ request }) => {
-        const response = await request.get('/api/users?page=2', {
-            headers: {
-                'Content-Type': 'application/json',
-                'x-api-key': process.env.API_KEY
-            }
-        });
+        const userClient = new UserClient(request);
+        const response = await userClient.getUsersList(2); // page = 2
 
         expect(response.status()).toBe(200);
         expect(response.ok()).toBeTruthy();
@@ -30,13 +30,8 @@ test.describe('GET - User API - Manual structure validations', () => {
 
     //TC02 - GET user by id
     test('Get - User by ID - Manual structure validations', async ({ request }) => {
-        const id = 2;
-        const response = await request.get(`/api/users/${id}`, {
-            headers: {
-                'Content-Type': 'application/json',
-                'x-api-key': process.env.API_KEY
-            }
-        });
+        const userClient = new UserClient(request);
+        const response = await userClient.getUserById(2); // id = 2 
 
         expect(response.status()).toBe(200);
         expect(response.ok()).toBeTruthy();
@@ -52,16 +47,13 @@ test.describe('GET - User API - Manual structure validations', () => {
     });
 });
 
-// GET - Users API tests with manual strcture validations
-test.describe('GET - Users List - With schema validation', () => {
+
+// GET - Users API tests with SCHEMA validation
+test.describe('GET - User API - With SCHEMA validation', () => {
     //TC01 - GET users list (schema validation)
     test('Get users list', async ({ request }) => {
-        const response = await request.get('/api/users?page=2', {
-            headers: {
-                'Content-Type': 'application/json',
-                'x-api-key': process.env.API_KEY
-            }
-        });
+        const userClient = new UserClient(request);
+        const response = await userClient.getUsersList(2); // page = 2
 
         expect(response.status()).toBe(200);
         expect(response.ok()).toBeTruthy();
@@ -72,13 +64,8 @@ test.describe('GET - Users List - With schema validation', () => {
 
     //TC02 - GET user by id (schema validation)
     test('Get user by id', async ({ request }) => {
-        const id = 2;
-        const response = await request.get(`/api/users/${id}`, {
-            headers: {
-                'Content-Type': 'application/json',
-                'x-api-key': process.env.API_KEY
-            }
-        });
+        const userClient = new UserClient(request);
+        const response = await userClient.getUserById(2); // id = 2
 
         expect(response.ok()).toBeTruthy();
         expect(response.status()).toBe(200);
@@ -97,29 +84,26 @@ test.describe('GET - Users List - With schema validation', () => {
 test.describe('POST - Create user API test', () => {
     //TC01 - POST create user
     test('Create user - Manual structure validations', async ({ request }) => {
-        const data = {
-            name: 'Samuel Martins',
-            job: 'Automation Engineer'
-        };
+        const userClient = new UserClient(request);
+        const fakeUser = new DataGenerator().generateUserAPIObj();
 
-        const response = await request.post('/api/users', {
-            headers: {
-                'Content-Type': 'application/json',
-                'x-api-key': process.env.API_KEY
-            },
-            data
-        });
+        // INFO: Uncomment to see generated fake data
+        console.log("\n\nGenerated fake name => " + fakeUser.name);
+        console.log("Generated fake job => " + fakeUser.job);
+
+        const payload = userPayloadBuilder({ name: fakeUser.name, job: fakeUser.job });
+        const response = await userClient.createUser(payload); // payload = userPayloadBuilder() -> only name + job
 
         expect(response.status()).toBe(201);
         expect(response.statusText()).toBe('Created');
 
         const responseBody = await response.json();
         // Assert passed data in the request body
-        expect(responseBody.name).toEqual(data.name);
-        expect(responseBody.job).toEqual(data.job);
+        expect(responseBody.name).toEqual(fakeUser.name);
+        expect(responseBody.job).toEqual(fakeUser.job);
         // Assert extra data: generated id and timestamp
         expect(responseBody.id).toEqual(expect.any(String))
-
+        // Assert "createdAt" property to be of type Date
         const createdAtProperty = new Date(responseBody.createdAt);
         expect(createdAtProperty).toEqual(expect.any(Date));
     });
@@ -129,28 +113,20 @@ test.describe('POST - Create user API test', () => {
 test.describe('PUT - Update user API test', () => {
     //TC01 - PUT update user
     test('Update user - Manual structure validations', async ({ request }) => {
+        const userClient = new UserClient(request);
+        const fakeUser = new DataGenerator().generateUserAPIObj();
+
         const id = 2;
-        const data = {
-            name: 'Samuel Martins Updated',
-            job: 'Automation Engineer Updated to Senior'
-        };
-
-        const response = await request.put(`/api/users/${id}`, {
-            headers: {
-                'Content-Type': 'application/json',
-                'x-api-key': process.env.API_KEY
-            },
-            data
-        });
-
+        const payload = userPayloadBuilder({ job: fakeUser.job });
+        const response = await userClient.updateUser(id, payload); // payload = userPayloadBuilder with default name but fake job
+        
         expect(response.status()).toBe(200);
         expect(response.ok()).toBeTruthy();
 
         const responseBody = await response.json();
-        // Assert passed data in the request body
-        expect(responseBody.name).toEqual(data.name);
-        expect(responseBody.job).toEqual(data.job);
-
+        // Assert default name BUT fake generated job
+        expect(responseBody.name).toEqual(userPayloadBuilder().name);
+        expect(responseBody.job).toEqual(fakeUser.job);
         // Assert extra data: generated updatedAt property
         const updatedAtProperty = new Date(responseBody.updatedAt);
         expect(updatedAtProperty).toEqual(expect.any(Date));
@@ -161,14 +137,10 @@ test.describe('PUT - Update user API test', () => {
 // DELETE
 test.describe('DELETE - Delete user API test', () => {
     //TC01 - DELETE delete user
-    test('Delete user with id- Manual structure validations', async ({ request }) => {
-        const id = 2;
-        const response = await request.delete(`/api/users/${id}`, {
-            headers: {
-                'Content-Type': 'application/json',
-                'x-api-key': process.env.API_KEY
-            }
-        });
+    test('Delete user with id - Manual structure validations', async ({ request }) => {
+        const userClient = new UserClient(request);
+        const id = 22;
+        const response = await userClient.deleteUser(id);
 
         expect(response.status()).toBe(204);
         expect(response.statusText()).toBe('No Content');
