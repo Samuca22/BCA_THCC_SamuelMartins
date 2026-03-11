@@ -18,7 +18,7 @@ If either command is not found or the version is too old, install or update Node
 
 ### Install Node.js (if needed)
 
-- **Official installer:** [https://nodejs.org/](https://nodejs.org/) — download the LTS version and run the installer.
+- **Official installer:** [https://nodejs.org/] — download the LTS version and run the installer.
 - **With a package manager:**
   - **Windows (winget):** `winget install OpenJS.NodeJS.LTS`
   - **macOS (Homebrew):** `brew install node`
