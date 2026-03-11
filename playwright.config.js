@@ -17,7 +17,10 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
-  reporter: 'html',
+  reporter: [
+    ['html', { open: 'never', outputFolder: 'playwright-report' }],
+    ['allure-playwright', { outputFolder: 'reports' }],
+  ],
 
   /* Shared settings for all the projects below. */
   use: {
