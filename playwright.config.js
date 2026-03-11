@@ -33,7 +33,10 @@ export default defineConfig({
   // TODO Explicar no README a decisao da logica de cada teste (api e ui)
   // Colocar no root do projeto o PDF do code-challenge e collection postman (adicionar ao readme referencia para MS WORD como configurar o postman (API KEY))
   // Criar MS Word com tutorial de como obter API KEY do site reqres.in e como configurar o postman
-    
+
+
+  // Por fim rever testes de UI e melhorar robustez e boas praticas
+
 
   /* Shared settings for all the projects below. */
   use: {
