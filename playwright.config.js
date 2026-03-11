@@ -5,7 +5,8 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-dotenv.config({ path: path.resolve(__dirname, '.env') });
+// Load environment variables from absolute path in project root of .env file
+dotenv.config({ path: path.resolve(__dirname, '.env') }); 
 
 export default defineConfig({
   testDir: './src',
@@ -21,6 +22,18 @@ export default defineConfig({
     ['html', { open: 'never', outputFolder: 'playwright-report' }],
     ['allure-playwright', { outputFolder: 'reports' }],
   ],
+
+  // TODO configurar ALLURE para guardar resultados na pasta "reports" ou "allure-reports"
+  // TODO configurar CI/CD
+  // TODO configurar allure para correr no CI/CD
+  // TODO Configurar CI para publicar os allure reports noutro sistema (avaliar como funciona e onde é suposto publicar esta informação)
+
+  // TODO Configurar dentro de testes de API logica para usar allure
+
+  // TODO Explicar no README a decisao da logica de cada teste (api e ui)
+  // Colocar no root do projeto o PDF do code-challenge e collection postman (adicionar ao readme referencia para MS WORD como configurar o postman (API KEY))
+  // Criar MS Word com tutorial de como obter API KEY do site reqres.in e como configurar o postman
+    
 
   /* Shared settings for all the projects below. */
   use: {

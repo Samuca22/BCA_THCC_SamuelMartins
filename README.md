@@ -67,7 +67,7 @@ After installing, open a new terminal and run `node --version` and `npm --versio
 |--------|-------------|
 | `npm run test` | Run all projects (API + UI) |
 | `npm run test:api` | Run API tests only |
-| `npm run test:ui` | Run UI tests only (Chrome, with auth setup) |
+| `npm run test:ui-chrome` | Run UI tests only (Chrome, with auth setup) |
 
 Run a specific test file:
 
