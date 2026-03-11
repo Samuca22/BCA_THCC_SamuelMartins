@@ -26,7 +26,7 @@ test('Navigate dashboard sidebar by name', async ({ page, dashboardPage }) => {
     }
 });
 
-test('Verify dashboard elements', async ({ dashboardPage }) => {
+test('Verify dashboard elements @sanity', async ({ dashboardPage }) => {
     await dashboardPage.gotoDashboardPage();
     await expect(dashboardPage.header.headerTitle).toHaveText('Dashboard');
     await expect(dashboardPage.dashboardGrid).toBeVisible();

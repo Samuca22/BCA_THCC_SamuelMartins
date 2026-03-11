@@ -11,8 +11,8 @@ test.use({
     }
   });
 
-// TC01 - Successful login
-test('Successful login', async ({ loginPage, dashboardPage }) => {
+// TC01 - Successful login (tag sanity test)
+test('Successful login @sanity', async ({ loginPage, dashboardPage }) => {
     await loginPage.gotoLoginPage();
     await loginPage.login(users[0].username, users[0].password);
     await expect(dashboardPage.header.headerTitle).toBeVisible();
