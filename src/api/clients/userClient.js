@@ -9,11 +9,17 @@ export class UserClient {
         return response;
     }
 
+    async getUsersListWithDelay(delay = 3) {
+        const response = await this.request.get(`/api/users?delay=${delay}`); // delay = 3 seconds
+        return response;
+    }
+
     async getUserById(id) {
         const response = await this.request.get(`/api/users/${id}`);
         return response;
     }
 
+    
     // POST
     async createUser(data) {
         const response = await this.request.post('/api/users', { data });

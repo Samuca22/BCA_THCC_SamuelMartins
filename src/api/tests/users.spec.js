@@ -6,13 +6,19 @@ import { UserClient } from '../clients/userClient.js';
 import { userPayloadBuilder } from '../builders/userPayloadBuilder.js';
 import { DataGenerator } from '../../utils/DataGenerator.js';
 
+//Constants
+const PAGE = 2;
+const ID_USER = 2;
+const ID_NON_EXISTING_USER = 999999;
+const DELAY = 3;
+const REASONABLE_TIMEOUT = 5000; // 5 seconds
 
 // GET - Users API tests with manual strcture validations
-test.describe('GET - User API - MANUAL structure validations', () => {
+test.describe('GET - User API - Manual structure validations', () => {
     //TC01 - GET users list
     test('Get users list - Manual structure validations', async ({ request }) => {
         const userClient = new UserClient(request);
-        const response = await userClient.getUsersList(2); // page = 2
+        const response = await userClient.getUsersList(PAGE); // page = 2
 
         expect(response.status()).toBe(200);
         expect(response.ok()).toBeTruthy();
@@ -31,7 +37,7 @@ test.describe('GET - User API - MANUAL structure validations', () => {
     //TC02 - GET user by id
     test('Get - User by ID - Manual structure validations', async ({ request }) => {
         const userClient = new UserClient(request);
-        const response = await userClient.getUserById(2); // id = 2 
+        const response = await userClient.getUserById(ID_USER); // id = 2 
 
         expect(response.status()).toBe(200);
         expect(response.ok()).toBeTruthy();
@@ -53,7 +59,7 @@ test.describe('GET - User API - With SCHEMA validation', () => {
     //TC01 - GET users list (schema validation)
     test('Get users list', async ({ request }) => {
         const userClient = new UserClient(request);
-        const response = await userClient.getUsersList(2); // page = 2
+        const response = await userClient.getUsersList(PAGE); // page = 2
 
         expect(response.status()).toBe(200);
         expect(response.ok()).toBeTruthy();
@@ -65,7 +71,7 @@ test.describe('GET - User API - With SCHEMA validation', () => {
     //TC02 - GET user by id (schema validation)
     test('Get user by id', async ({ request }) => {
         const userClient = new UserClient(request);
-        const response = await userClient.getUserById(2); // id = 2
+        const response = await userClient.getUserById(ID_USER); // id = 2
 
         expect(response.ok()).toBeTruthy();
         expect(response.status()).toBe(200);
@@ -88,8 +94,8 @@ test.describe('POST - Create user API test', () => {
         const fakeUser = new DataGenerator().generateUserAPIObj();
 
         // INFO: Uncomment to see generated fake data
-        console.log("\n\nGenerated fake name => " + fakeUser.name);
-        console.log("Generated fake job => " + fakeUser.job);
+        //console.log("\n\nGenerated fake name => " + fakeUser.name);
+        //console.log("Generated fake job => " + fakeUser.job);
 
         const payload = userPayloadBuilder({ name: fakeUser.name, job: fakeUser.job });
         const response = await userClient.createUser(payload); // payload = userPayloadBuilder() -> only name + job
@@ -116,9 +122,8 @@ test.describe('PUT - Update user API test', () => {
         const userClient = new UserClient(request);
         const fakeUser = new DataGenerator().generateUserAPIObj();
 
-        const id = 2;
         const payload = userPayloadBuilder({ job: fakeUser.job });
-        const response = await userClient.updateUser(id, payload); // payload = userPayloadBuilder with default name but fake job
+        const response = await userClient.updateUser(ID_USER, payload); // payload = userPayloadBuilder with default name but fake job
         
         expect(response.status()).toBe(200);
         expect(response.ok()).toBeTruthy();
@@ -139,8 +144,7 @@ test.describe('DELETE - Delete user API test', () => {
     //TC01 - DELETE delete user
     test('Delete user with id - Manual structure validations', async ({ request }) => {
         const userClient = new UserClient(request);
-        const id = 22;
-        const response = await userClient.deleteUser(id);
+        const response = await userClient.deleteUser(ID_USER);
 
         expect(response.status()).toBe(204);
         expect(response.statusText()).toBe('No Content');
@@ -148,5 +152,47 @@ test.describe('DELETE - Delete user API test', () => {
         // Assert empty response body by text
         const responseBody = await response.text();
         expect(responseBody).toBe('');
+    });
+});
+
+// Advanced scenarios tests
+test.describe('Advanced scenarios tests', () => {
+    //TC01 - Get user with non-existing id => validate 404 and empty response body
+    test('Get user with non-existing id', async ({ request }) => {
+        const userClient = new UserClient(request);
+        const response = await userClient.getUserById(ID_NON_EXISTING_USER);
+
+        expect(response.status()).toBe(404);
+        expect(response.statusText()).toBe('Not Found');
+
+        const responseBody = await response.json();
+        expect(responseBody).toEqual({});
+    });
+
+    //TC02 - Get users list with delay => validate response received in timeframe and valid schema scructure
+    test('Get users list with delay', async ({ request }) => {
+        const userClient = new UserClient(request);
+
+        // Time before request
+        const startTime = Date.now();
+        const response = await userClient.getUsersListWithDelay(DELAY);
+        
+        expect(response.status()).toBe(200);
+        expect(response.ok()).toBeTruthy();
+        
+        const responseBody = await response.json();
+
+        // Validate response received in timeframe (delay)
+        const endTime = Date.now();
+        const duration = endTime - startTime;
+
+        // Assert (verify) response is received in reasonable timeout
+        expect(duration).toBeLessThan(REASONABLE_TIMEOUT);
+        // Validate schema structure
+        const validationSchemaResult = validateSchema(usersListSchema, responseBody);
+        expect(
+            validationSchemaResult.isValid,
+            validationSchemaResult.errorMessage
+        ).toBe(true, null);
     });
 });
