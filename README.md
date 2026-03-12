@@ -93,16 +93,13 @@ npx playwright test src/ui/tests/login.spec.js
   npx playwright show-report
   ```
 
-- **Allure report** (optional): raw results are written to `reports/`. To view the Allure UI you need **Java** (JDK) and `JAVA_HOME` set, then install the Allure CLI and generate the report:
+- **Allure report** (optional): raw results are written to `allure-results/` (see `playwright.config.js`). Generate the HTML report then open the generated folder (do not run `allure open allure-results` — that opens raw data and the UI will be blank). Requires **Java** (JDK) and `JAVA_HOME`:
 
   ```bash
-  npm install -D allure-commandline
-  npx allure generate reports --clean -o allure-report
+  npx allure generate allure-results --clean -o allure-report
   npx allure open allure-report
   ```
 
-  If Java is not installed, you can still run all tests; ==> only viewing this report requires Java.
-
----
+  If Java is not installed, you can still run all tests; only viewing this report requires Java.
 
 **Portability:** The project runs on any machine with Node.js (clone, `npm install`, configure `.env`, `npx playwright install`). Running tests does **not** require Java. Viewing the Allure report is optional and requires Java and `JAVA_HOME`.

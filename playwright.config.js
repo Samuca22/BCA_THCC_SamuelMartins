@@ -20,10 +20,11 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: [
     ['html', { open: 'never', outputFolder: 'playwright-report' }],
-    ['allure-playwright', { resultsDir: 'reports' }],
+    ['allure-playwright', { resultsDir: 'allure-results' }],
   ],
-
-  // TODO configurar ALLURE para guardar resultados na pasta "reports" ou "allure-reports"
+  // Allure: raw results go to "allure-results/". To view (requires Java + JAVA_HOME):
+  //   npx allure generate allure-results --clean -o allure-report
+  //   npx allure open allure-report
   // TODO configurar CI/CD
   // TODO configurar allure para correr no CI/CD
   // TODO Configurar CI para publicar os allure reports noutro sistema (avaliar como funciona e onde é suposto publicar esta informação)
