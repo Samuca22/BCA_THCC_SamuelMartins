@@ -30,6 +30,9 @@ jobs:
       - name: Run tests api
         run: npx playwright test --project=api
 
+      - name: Run tests ui
+        run: npx playwright test --project=ui-chrome
+
       - name: Generate Allure report
         run: npx allure generate allure-results --clean -o allure-report
 
