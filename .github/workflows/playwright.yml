@@ -34,9 +34,11 @@ jobs:
         run: npx playwright test --project=ui-chrome
 
       - name: Generate Allure report
+        if: always() && failure()
         run: npx allure generate allure-results --clean -o allure-report
 
       - name: Upload allure report
+        if: always()
         uses: actions/upload-artifact@v5
         with:
           name: allure-report
