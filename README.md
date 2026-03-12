@@ -6,6 +6,7 @@ Constellation Automotive group BCA Take-Home Challenge for 2nd stage interview.
 
 - **Node.js** (v18 or later recommended)
 - **npm** (included with Node.js)
+- **Java** (JDK 8 or later; only required to view the Allure report)
 
 ### Check if Node.js and npm are installed
 
@@ -15,6 +16,14 @@ npm --version    # e.g. 9.x or 10.x
 ```
 
 If either command is not found or the version is too old, install or update Node.js (npm is bundled with it).
+
+### Check if Java is installed (for viewing Allure report)
+
+```bash
+java -version   # e.g. openjdk version "17.0.x" or similar
+```
+
+If the command is not found or you need a newer JDK, see below to install Java and set `JAVA_HOME`.
 
 ### Install Node.js (if needed)
 
@@ -65,9 +74,9 @@ After installing, open a new terminal and run `node --version` and `npm --versio
 
 | Command | Description |
 |--------|-------------|
-| `npm run test` | Run all projects (API + UI) |
-| `npm run test:api` | Run API tests only |
-| `npm run test:ui-chrome` | Run UI tests only (Chrome, with auth setup) |
+| `npx playwright test` | Run all projects (API + UI) |
+| `npx playwright test --project=api` | Run API tests only |
+| `npx playwright test --project=ui-chrome` | Run UI tests only (Chrome, with auth setup) |
 
 Run a specific test file:
 
@@ -84,7 +93,7 @@ npx playwright test src/ui/tests/login.spec.js
   npx playwright show-report
   ```
 
-- **Allure report** (optional): raw results are written to `reports/`. To view the Allure UI, install the Allure CLI and generate the report:
+- **Allure report** (optional): raw results are written to `reports/`. To view the Allure UI you need **Java** (JDK) and `JAVA_HOME` set, then install the Allure CLI and generate the report:
 
   ```bash
   npm install -D allure-commandline
@@ -92,6 +101,8 @@ npx playwright test src/ui/tests/login.spec.js
   npx allure open allure-report
   ```
 
+  If Java is not installed, you can still run all tests; ==> only viewing this report requires Java.
+
 ---
 
-These steps are enough for the project to run on any machine after clone and `npm install`.
+**Portability:** The project runs on any machine with Node.js (clone, `npm install`, configure `.env`, `npx playwright install`). Running tests does **not** require Java. Viewing the Allure report is optional and requires Java and `JAVA_HOME`.

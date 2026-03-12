@@ -20,7 +20,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: [
     ['html', { open: 'never', outputFolder: 'playwright-report' }],
-    ['allure-playwright', { outputFolder: 'reports' }],
+    ['allure-playwright', { resultsDir: 'reports' }],
   ],
 
   // TODO configurar ALLURE para guardar resultados na pasta "reports" ou "allure-reports"
