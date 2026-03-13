@@ -10,6 +10,7 @@ export class PimPage {
         this.buttonSearch = page.getByRole('button', { name: 'Search' });
         this.buttonAdd = page.getByRole('button', { name: 'Add' });
         this.toastNoResultsFound = page.locator('#oxd-toaster_1').getByText('No Records Found');
+        this.cardLoader = page.locator('.oxd-table-loader');
     }
 
     /** Navigate to PIM Employee List (start page for PIM tests). Resolves against project baseURL. */
@@ -17,7 +18,7 @@ export class PimPage {
         await this.page.goto('/web/index.php/pim/viewEmployeeList');
     }
 
-    async filterByName(name) {
+    async searchEmployeeByName(name) {
         await this.inputFilterEmployeeName.fill(name);
         await this.buttonSearch.click();
     }

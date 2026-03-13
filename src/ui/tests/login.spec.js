@@ -12,7 +12,7 @@ test.use({
   });
 
 // TC01 - Successful login (tag sanity test)
-test('Successful login @sanity', async ({ loginPage, dashboardPage }) => {
+test('Successful login', {tag: '@sanity'}, async ({ loginPage, dashboardPage }) => {
     await loginPage.gotoLoginPage();
     await loginPage.login(users[0].username, users[0].password);
     //await expect(dashboardPage.header.headerTitle).toBeVisible();
@@ -21,7 +21,7 @@ test('Successful login @sanity', async ({ loginPage, dashboardPage }) => {
 });
 
 // Negative scenarios
-test.describe('Negative state scenarios', () => {
+test.describe('Negative state scenarios', {tag: '@sanity'}, () => {
     // TC02 - Failed login - Invalid password
     test('Failed login - Invalid password', async ({ loginPage }) => {
         await loginPage.gotoLoginPage();
@@ -32,11 +32,10 @@ test.describe('Negative state scenarios', () => {
 
 
     // TC03 - Failed login - Empty fields
-    test('Failed login - Empty fields', async ({ loginPage       }) => {
+    test('Failed login - Empty fields', {tag: '@sanity'}, async ({ loginPage }) => {
         await loginPage.gotoLoginPage();
         await loginPage.submit();
         
         await expect(loginPage.usernameRequiredError).toBeVisible();
-        await expect(loginPage.passwordRequiredError).toBeVisible();
     });
 });

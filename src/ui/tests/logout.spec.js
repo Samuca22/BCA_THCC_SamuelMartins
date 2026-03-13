@@ -15,6 +15,9 @@ test('Logout', async ({ loginPage, dashboardPage }) => {
     await loginPage.gotoLoginPage();
     await loginPage.login(users[0].username, users[0].password);
     await expect(dashboardPage.header.headerTitle).toHaveText('Dashboard');
+
     await dashboardPage.header.logout();
+    
+    await expect(dashboardPage.page).toHaveURL(/auth\/login/);
     await expect(loginPage.titleLogin).toBeVisible();
 });

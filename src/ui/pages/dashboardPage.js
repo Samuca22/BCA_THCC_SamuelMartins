@@ -22,23 +22,11 @@ export class DashboardPage {
     }
 
     async navigateToMenuItem(itemName) {
-        const previousURL = this.page.url();
-        try {
-            await this.sidebar.waitFor({ state: 'visible', timeout: 10000 });
-            await this.clickSidebarItem(itemName);
-            await this.sidebar.waitFor({ state: 'visible', timeout: 10000 });
-            return true;
-        } catch {
-            try {
-                await this.page.goto(previousURL);
-            } catch {
-                console.warn('Could not go back to previous URL');
-            }
-            return false;
-        }
+        await this.sidebar.waitFor({ state: 'visible', timeout: 10000 });
+        await this.clickSidebarItem(itemName);
     }
 
     async isSidebarVisible() {
-        return await this.sidebar.isVisible();
+        return await this.sidebar.isVisible().catch(() => false);
     }
 }

@@ -66,10 +66,16 @@ After installing, open a new terminal and run `node --version` and `npm --versio
 ## Running tests
 
 | Command | Description |
-|--------|-------------|
+|---------|-------------|
 | `npx playwright test` | Run all projects (API + UI) |
 | `npx playwright test --project=api` | Run API tests only |
 | `npx playwright test --project=ui-chrome` | Run UI tests only (Chrome, with auth setup) |
+
+Run ui sanity tests in ui headed mode use:
+
+```bash
+   npx playwright test --headed --grep '@sanity'
+```
 
 Run a specific test file:
 
@@ -85,7 +91,6 @@ npx playwright test src/ui/tests/login.spec.js
   ```bash
   npx playwright show-report
   ```
-
 
 - **Allure report (OPTIONAL)**:
 

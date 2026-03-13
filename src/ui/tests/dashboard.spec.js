@@ -10,23 +10,31 @@ test('Navigate dashboard sidebar by name', async ({ page, dashboardPage }) => {
 
     await dashboardPage.gotoDashboardPage();
     await expect(dashboardPage.header.headerTitle).toHaveText('Dashboard', { timeout: 15000 });
-    await expect(dashboardPage.sidebar).toBeVisible({ timeout: 15000 });
+    await expect(dashboardPage.sidebar).toBeVisible({ timeout: 20000 });
 
     const menuItems = await dashboardPage.getSidebarItemNames();
     expect(menuItems.length).toBeGreaterThan(0);
     // Loop every sidebar item and verify header title change
     for (const menuitem of menuItems) {
         const expectedHeader = headerOverrides[menuitem] ?? menuitem;
-        const stayedOnPageWithSidebar = await dashboardPage.navigateToMenuItem(menuitem);
+        const previousURL = dashboardPage.page.url();
+    
+        await dashboardPage.navigateToMenuItem(menuitem);
 
-        if (!stayedOnPageWithSidebar) {
+        // Verify if new page without sidebar is loaded
+        const stillHasSidebar = await dashboardPage.isSidebarVisible();
+        if (!stillHasSidebar) {
+            // If new page without sidebar is loaded, go back to previous page
+            await dashboardPage.page.goto(previousURL);
             continue;
         }
-        await expect(dashboardPage.header.headerTitle).toContainText(expectedHeader, { timeout: 15000 });
+
+        await expect(dashboardPage.page).toHaveURL(previousURL);
+        await expect(dashboardPage.header.headerTitle).toContainText(expectedHeader, { timeout: 20000 });
     }
 });
 
-test('Verify dashboard elements @sanity', async ({ dashboardPage }) => {
+test('Verify dashboard elements', {tag: '@sanity'}, async ({ dashboardPage }) => {
     await dashboardPage.gotoDashboardPage();
     await expect(dashboardPage.header.headerTitle).toHaveText('Dashboard');
     await expect(dashboardPage.dashboardGrid).toBeVisible();

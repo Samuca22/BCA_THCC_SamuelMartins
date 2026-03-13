@@ -15,15 +15,14 @@ export class AddEmployeePage {
         this.errorEmployeeIdExists = page.getByText('Employee Id already exists');
     }
 
+    async gotoAddEmployeePage(){
+        await this.page.goto('/web/index.php/pim/addEmployee');
+    }
+
     async addEmployee(firstname, lastName, employeeid){
         await this.inputFirstName.fill(firstname);
         await this.inputLastName.fill(lastName);
         await this.inputEmployeeId.fill(employeeid);
-
-        // Click Save and wait for navigation to the employee details page
-        await Promise.all([
-            this.page.waitForURL(/pim\/viewPersonalDetails/),
-            this.buttonSave.click(),
-        ]);
+        await this.buttonSave.click();
     }
 }

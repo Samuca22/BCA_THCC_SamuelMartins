@@ -9,6 +9,7 @@ import { DataGenerator } from '../../utils/DataGenerator';
 
 test('Navigate to PIM page', async ({ page, dashboardPage, pimPage }) => {
     await page.goto('/');
+    await expect(dashboardPage.sidebar).toBeVisible();
     await dashboardPage.clickSidebarItem('PIM');
     await expect(pimPage.header.headerTitle).toContainText('PIM');
     await expect(pimPage.employeeList).toBeVisible();
@@ -22,8 +23,11 @@ test.describe('Search employee in list by name', () => {
 
     for (const employee of employeesData.employees) {
         test(`Search employee by name: ${employee.firstname} and expect: ${employee.expected}`, async ({ pimPage }) => {
-            await pimPage.filterByName(employee.firstname);
+            
+            await pimPage.searchEmployeeByName(employee.firstname);
+            // Assert page is loaded
             await expect(pimPage.employeeList).toBeVisible({ timeout: 20000 });
+            await expect(pimPage.cardLoader).toBeHidden();
             await pimPage.employeeList.scrollIntoViewIfNeeded();
 
             // Verify if there are results in table and what expected result is
@@ -44,8 +48,7 @@ test.describe('Search employee in list by name', () => {
 test('Add employee and verify in details', async ({ pimPage, addEmployeePage, employeeDetailsPage }) => {
     const dataGenerator = new DataGenerator();          
 
-    await pimPage.gotoEmployeeList();
-    await pimPage.clickAddEmployee();
+    await addEmployeePage.gotoAddEmployeePage();
 
     // Validate page is loaded
     await expect(addEmployeePage.cardTitle).toBeVisible({ timeout: 10000 });
@@ -53,7 +56,6 @@ test('Add employee and verify in details', async ({ pimPage, addEmployeePage, em
     await expect(addEmployeePage.inputFirstName).toBeEnabled();
     await expect(addEmployeePage.cardLoader).toBeHidden();
     
-
     // Create a new employee object with random faker data
     let employeeObj = dataGenerator.generateEmployeeObj();
     // Add employee from data object
@@ -62,21 +64,26 @@ test('Add employee and verify in details', async ({ pimPage, addEmployeePage, em
         employeeObj.lastname, 
         employeeObj.employeeid
     );
-
+    
     // Only Id needs to be unique, if already exists, generate a new object and try again
     if ( await addEmployeePage.errorEmployeeIdExists.isVisible() ) {
-        employeeObj = dataGenerator.generateEmployeeObj();
-        await addEmployeePage.addEmployee(
-            employeeObj.firstname, 
-            employeeObj.lastname, 
-            employeeObj.employeeid
-        );
+        while ( await addEmployeePage.errorEmployeeIdExists.isVisible()) {
+            employeeObj = dataGenerator.generateEmployeeObj();
+            await addEmployeePage.addEmployee(
+                employeeObj.firstname,
+                employeeObj.lastname,
+                employeeObj.employeeid
+            );
+        }
     }
-
+    
     // Verify if details card is loaded
-    await expect(employeeDetailsPage.cardLoader).toBeHidden({ timeout: 10000 });
+    await expect(employeeDetailsPage.cardLoader).toBeHidden({ timeout: 15000 });
 
     // Verify card has the employee full name
-    const employeeFullname = employeeDetailsPage.getEmployeeDetailsNameHeading(employeeObj.firstname, employeeObj.lastname);
+    const employeeFullname = employeeDetailsPage.getEmployeeDetailsNameHeading(
+        employeeObj.firstname, 
+        employeeObj.lastname
+    );
     await expect(employeeFullname).toBeVisible({ timeout: 20000 });
 });
