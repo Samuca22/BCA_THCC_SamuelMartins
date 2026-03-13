@@ -15,7 +15,8 @@ test.use({
 test('Successful login @sanity', async ({ loginPage, dashboardPage }) => {
     await loginPage.gotoLoginPage();
     await loginPage.login(users[0].username, users[0].password);
-    await expect(dashboardPage.header.headerTitle).toBeVisible();
+    //await expect(dashboardPage.header.headerTitle).toBeVisible();
+    await expect(dashboardPage.page).toHaveURL(/dashboard/);
     await expect(dashboardPage.header.headerTitle).toHaveText('Dashboard');
 });
 

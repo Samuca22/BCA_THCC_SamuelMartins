@@ -1,4 +1,3 @@
-import { promises } from 'node:dns';
 import { HeaderComponent } from '../components/HeaderComponent';
 
 export class DashboardPage {
@@ -24,18 +23,16 @@ export class DashboardPage {
 
     async navigateToMenuItem(itemName) {
         const previousURL = this.page.url();
-        // click on sidebar item by name
-        await this.clickSidebarItem(itemName);
-        // Verify if sidebar is still visible, if not then another page was opened (without sidebar and header)
         try {
+            await this.sidebar.waitFor({ state: 'visible', timeout: 10000 });
+            await this.clickSidebarItem(itemName);
             await this.sidebar.waitFor({ state: 'visible', timeout: 10000 });
             return true;
         } catch {
             try {
                 await this.page.goto(previousURL);
             } catch {
-                // Page/context may be closed (e.g. test timeout or link opened new tab)
-                console.warn('Could not go back to previous URL:');
+                console.warn('Could not go back to previous URL');
             }
             return false;
         }
