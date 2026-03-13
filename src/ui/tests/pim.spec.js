@@ -33,7 +33,7 @@ test.describe('Search employee in list by name', () => {
             // Verify if there are results in table and what expected result is
             const rowCount = await pimPage.getEmployeeRowCount(employee.firstname);
             if (rowCount === 0 && employee.expected === 'no-results') {
-                // No results should appear toast with message "No Records Found"
+                // No results -> should appear toast with message "No Records Found"
                 await expect(pimPage.toastNoResultsFound).toBeVisible();
             } else {
                 // Results found, verify that the first row is visible
@@ -58,7 +58,6 @@ test('Add employee and verify in details', async ({ pimPage, addEmployeePage, em
     
     // Create a new employee object with random faker data
     let employeeObj = dataGenerator.generateEmployeeObj();
-    // Add employee from data object
     await addEmployeePage.addEmployee(
         employeeObj.firstname, 
         employeeObj.lastname, 

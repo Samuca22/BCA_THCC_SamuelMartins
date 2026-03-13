@@ -24,7 +24,6 @@ test('Navigate dashboard sidebar by name', async ({ page, dashboardPage }) => {
         // Verify if new page without sidebar is loaded
         const stillHasSidebar = await dashboardPage.isSidebarVisible();
         if (!stillHasSidebar) {
-            // If new page without sidebar is loaded, go back to previous page
             await dashboardPage.page.goto(previousURL);
             continue;
         }

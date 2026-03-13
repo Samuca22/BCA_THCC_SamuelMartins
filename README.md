@@ -50,8 +50,8 @@ After installing, open a new terminal and run `node --version` and `npm --versio
    - **API tests:** `API_BASE_URL`, `API_KEY`
    - **UI tests:** `UI_BASE_URL`, `VALID_USERNAME`, `VALID_PASSWORD`
 
-   **! IMPORTANT !** 
-   Check project documentation folder the pdf `Reqres API Key config` file on how to configure: API_KEY, VALID_USERNAME and VALID_PASSWORD
+   *IMPORTANT* 
+    Check project documentation folder the pdf `Reqres API Key config` file on how to configure: API_KEY, VALID_USERNAME and VALID_PASSWORD
 
 4. **Install Playwright browsers (first time only)**
 
@@ -90,11 +90,10 @@ npx playwright test src/ui/tests/login.spec.js
 
 - **Allure report (OPTIONAL)**:
 
-- - **!IMPORTANT!** 
-For  allure reports to work make sure Java is installed **Java** (JDK) and `JAVA_HOME` env variable is configured.
-Follow the instructions in the pdf file named `JAVA JDK installation` guide inside `documentation/` folder in the project root.
-After installation if finished run the tests again and generate the allure report with the commands below
-
+  *IMPORTANT*
+    For  allure reports to work make sure Java is installed **Java** (JDK) and `JAVA_HOME` env variable is configured.
+    Follow the instructions in the pdf file named `JAVA JDK installation guide` inside `documentation/` folder in the project root.
+    After installation if finished run the tests again and generate the allure report with the commands below
 
 To run allure reports, after test runs input the following commands:
 
@@ -106,7 +105,6 @@ To run allure reports, after test runs input the following commands:
   If Java is not installed, you can still run all tests; only viewing this report requires Java.
 
 **Portability:** The project runs on any machine with Node.js (clone, `npm install`, configure `.env`, `npx playwright install`). Running tests does **not** require Java. Viewing the Allure report is optional and requires Java and `JAVA_HOME`.
-
 
 
 
