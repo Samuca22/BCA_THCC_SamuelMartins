@@ -17,11 +17,7 @@ npm --version
 
 ### Install Node.js (if needed)
 
-- **Official installer:** [https://nodejs.org/] — download the LTS version and run the installer.
-- **With a package manager:**
-  - **Windows (winget):** `winget install OpenJS.NodeJS.LTS`
-  - **macOS (Homebrew):** `brew install node`
-  - **Linux (apt):** `sudo apt update && sudo apt install nodejs npm`
+- **Official installer:** [https://nodejs.org/] — download the LTS version for the desired system and run the installer.
 
 After installing, open a new terminal and run `node --version` and `npm --version` again to confirm.
 
@@ -94,9 +90,11 @@ npx playwright test src/ui/tests/login.spec.js
 
 - **Allure report (OPTIONAL)**:
 
-!!IMPORTANT!! 
-For viewing allure reports make sure Java is installed **Java** (JDK) and `JAVA_HOME` env variable is configured.
-If not, follow the instructions in the pdf file inside `documentation/` folder in the project root
+- - **!IMPORTANT!** 
+For  allure reports to work make sure Java is installed **Java** (JDK) and `JAVA_HOME` env variable is configured.
+Follow the instructions in the pdf file named `JAVA JDK installation` guide inside `documentation/` folder in the project root.
+After installation if finished run the tests again and generate the allure report with the commands below
+
 
 To run allure reports, after test runs input the following commands:
 

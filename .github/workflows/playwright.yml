@@ -27,10 +27,10 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
 
-      - name: Run tests api
+      - name: Run tests API
         run: npx playwright test --project=api
 
-      - name: Run tests ui
+      - name: Run tests UI
         run: npx playwright test --project=ui-chrome
 
       - name: Upload Playwright report
