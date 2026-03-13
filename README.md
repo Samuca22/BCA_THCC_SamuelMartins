@@ -149,3 +149,6 @@ Below is explained the project structure:
   - **Portability & onboarding**: Combined with the setup instructions and documentation PDFs.
 
   
+- **CI pipeline (optional)**
+  The git actions pipeline runs only on git push to remote on the "main" branch and upload the playwright reports an artifact.
+  All the necessary commands to build and run the project are inside `./.github/workflows/playwright.yml`.
