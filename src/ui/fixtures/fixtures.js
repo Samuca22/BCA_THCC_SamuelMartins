@@ -1,9 +1,9 @@
 import { test as base } from '@playwright/test';
-import { LoginPage } from '../pages/loginPage.js';
-import { DashboardPage } from '../pages/dashboardPage.js';
-import { PimPage } from '../pages/pimPage.js';
-import { AddEmployeePage } from '../pages/addEmployeePage.js';
-import { EmployeeDetailsPage } from '../pages/employeeDetailsPage.js';
+import { LoginPage } from '../pages/LoginPage.js';
+import { DashboardPage } from '../pages/DashboardPage.js';
+import { PimPage } from '../pages/PimPage.js';
+import { AddEmployeePage } from '../pages/AddEmployeePage.js';
+import { EmployeeDetailsPage } from '../pages/EmployeeDetailsPage.js';
 
 export const test = base.extend({
     loginPage: async ({ page }, use) => {

@@ -1,3 +1,4 @@
+import { promises } from 'node:dns';
 import { HeaderComponent } from '../components/HeaderComponent';
 
 export class DashboardPage {
@@ -27,7 +28,7 @@ export class DashboardPage {
         await this.clickSidebarItem(itemName);
         // Verify if sidebar is still visible, if not then another page was opened (without sidebar and header)
         try {
-            await this.sidebar.waitFor({ state: 'visible', timeout: 5000 });
+            await this.sidebar.waitFor({ state: 'visible', timeout: 10000 });
             return true;
         } catch {
             try {

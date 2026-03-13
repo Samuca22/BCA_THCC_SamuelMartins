@@ -8,6 +8,9 @@ export class HeaderComponent {
     
     async logout(){
         await this.headerUserMenu.click();
-        await this.headerUserMenuItemLogout.click();
+        await Promise.all([
+            this.page.waitForURL(/\/(auth\/login)/),
+            this.headerUserMenuItemLogout.click(),
+        ]);
     }
 }

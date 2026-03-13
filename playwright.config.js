@@ -22,22 +22,6 @@ export default defineConfig({
     ['html', { open: 'never', outputFolder: 'playwright-report' }],
     ['allure-playwright', { resultsDir: 'allure-results' }],
   ],
-  // Allure: raw results go to "allure-results/". To view (requires Java + JAVA_HOME):
-  //   npx allure generate allure-results --clean -o allure-report
-  //   npx allure open allure-report
-  // TODO configurar CI/CD
-  // TODO configurar allure para correr no CI/CD
-  // TODO Configurar CI para publicar os allure reports noutro sistema (avaliar como funciona e onde é suposto publicar esta informação)
-
-  // TODO Configurar dentro de testes de API logica para usar allure
-
-  // TODO Explicar no README a decisao da logica de cada teste (api e ui)
-  // Colocar no root do projeto o PDF do code-challenge e collection postman (adicionar ao readme referencia para MS WORD como configurar o postman (API KEY))
-  // Criar MS Word com tutorial de como obter API KEY do site reqres.in e como configurar o postman
-
-
-  // Por fim rever testes de UI e melhorar robustez e boas praticas
-
 
   /* Shared settings for all the projects below. */
   use: {
