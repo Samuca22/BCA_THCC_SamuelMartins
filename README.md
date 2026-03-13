@@ -108,9 +108,17 @@ To run allure reports, after test runs input the following commands:
 **Portability:** The project runs on any machine with Node.js (clone, `npm install`, configure `.env`, `npx playwright install`). Running tests does **not** require Java. Viewing the Allure report is optional and requires Java and `JAVA_HOME`.
 
 
-## ======================================================================== ##
-##                  Project structure and design decisions
-## ======================================================================== ##
+
+
+## Project structure and design decisions
+
+The project follows a structure similar to the suggested in the challenge for better organization and maintenance.
+
+Following POM and best practices such as prioritizing locators with implicit aria roles or avoiding sleep states inside tests was the absolute priority.
+
+POM keeps locators in one place so UI changes require fewer test updates; ARIA-based locators improve accessibility alignment and tend to be more stable; avoiding sleeps in favour of Playwright’s built-in waiting makes tests more reliable and faster.
+
+Below is explained the project structure:
 
 - **High-level structure**
   - `src/api`: API tests, clients, schemas, payload builders, and shared utilities.
@@ -127,12 +135,12 @@ To run allure reports, after test runs input the following commands:
 
 - **UI tests (`src/ui`)**
   - **Goal**: Use a Page Object Model to keep locators and interactions in one place and make tests read like user flows.
-  - `pages/`: Page objects such as `DashboardPage`, `AddEmployeePage`, and `EmployeeDetailsPage` encapsulate locators and actions.
-  - `fixtures/fixtures.js`: Custom Playwright fixtures that bootstrap authenticated sessions and provide ready-to-use page objects in tests.
+  - `pages/`: Page objects encapsulate locators and actions.
+  - `fixtures/fixtures.js`: Custom Playwright fixtures provide ready-to-use page objects in tests and authentication state.
   - `tests/`: High-level scenarios (navigation, PIM search, add-employee flows) that read as business scenarios instead of low-level clicks.
   - `test-data/`: Static JSON and other inputs (for example employee data) to clearly separate test logic from test data.
 
-- **Cross-cutting utilities**
+- **Utilities**
   - `src/utils/DataGenerator.js`: Centralised random/test data generation for both API and UI tests.
   - `src/utils/SchemaValidator.js`: Single place for JSON schema validation logic, making it easy to change validation rules or libraries later.
 
@@ -140,4 +148,6 @@ To run allure reports, after test runs input the following commands:
   - **Separation of concerns**: Test files describe *what* is being verified; helpers, clients, and page objects implement *how*.
   - **Reusability**: Shared clients, builders, schemas, and page objects minimise duplication and make new tests faster to write.
   - **Maintainability**: Clear directory boundaries (API vs UI, tests vs utilities vs data) make it easy to locate and update related code.
-  - **Portability & onboarding**: Combined with the setup instructions and documentation PDFs, a new contributor can understand the layout and start writing tests quickly.
+  - **Portability & onboarding**: Combined with the setup instructions and documentation PDFs.
+
+  

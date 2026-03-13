@@ -1,0 +1,299 @@
+{
+  "info": {
+    "_postman_id": "c68be93d-90ba-4664-b761-67cad66bc589",
+    "name": "BCA THCC - Part A",
+    "description": "## BCA Take-Home Code Challenge - Part A\n\nThis collection is designed for **testing and prototyping REST API interactions** using the [reqres.in](https://reqres.in) hosted API. It covers two core areas of a typical web application: **user management** and **authentication**.\n\n---\n\n### 👤 Users Requests\n\nContains the full set of CRUD operations for managing users:\n\n| Method | Endpoint | Description |\n| --- | --- | --- |\n| `GET` | `/api/users?page=2` | Retrieve a paginated list of users |\n| `GET` | `/api/users/{id}` | Fetch a specific user by ID |\n| `POST` | `/api/users` | Create a new user |\n| `PUT` | `/api/users/{id}` | Fully update a user by ID |\n| `PATCH` | `/api/users/{id}` | Partially update a user by ID |\n| `DELETE` | `/api/users/{id}` | Delete a user by ID |\n\n---\n\n### 🔐 Auth Requests\n\nCovers user authentication flows:\n\n| Method | Endpoint | Description |\n| --- | --- | --- |\n| `POST` | `/api/register` | Register a new user account |\n\n---\n\n> **Note:** All requests target the [reqres.in](https://reqres.in) API — a free, hosted REST API built for front-end and back-end testing and prototyping. No real data is persisted.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "9464946"
+  },
+  "item": [
+    {
+      "name": "Users requests",
+      "item": [
+        {
+          "name": "GetUserList",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}"
+              }
+            ],
+            "url": {
+              "raw": "https://reqres.in/api/users?page=2",
+              "protocol": "https",
+              "host": [
+                "reqres",
+                "in"
+              ],
+              "path": [
+                "api",
+                "users"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "2"
+                }
+              ]
+            },
+            "description": "Generated from cURL: curl -X GET '[https://reqres.in/api/users?page=2'](https://reqres.in/api/users?page=2') -H 'x-api-key: {{API_KEY}}'"
+          },
+          "response": []
+        },
+        {
+          "name": "GetUserById",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://reqres.in/api/users/9999",
+              "protocol": "https",
+              "host": [
+                "reqres",
+                "in"
+              ],
+              "path": [
+                "api",
+                "users",
+                "9999"
+              ]
+            },
+            "description": "Generated from cURL: curl -X GET 'https://reqres.in/api/users?page=2' -H 'x-api-key: {{API_KEY}}'"
+          },
+          "response": []
+        },
+        {
+          "name": "CreateUser",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"Samuel\",\r\n    \"job\": \"Automation Eng.\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://reqres.in/api/users",
+              "protocol": "https",
+              "host": [
+                "reqres",
+                "in"
+              ],
+              "path": [
+                "api",
+                "users"
+              ]
+            },
+            "description": "Generated from cURL: curl -X GET 'https://reqres.in/api/users?page=2' -H 'x-api-key: {{API_KEY}}'"
+          },
+          "response": []
+        },
+        {
+          "name": "UpdateUserById",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"Samuel\",\r\n    \"job\": \"Updated job\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://reqres.in/api/users/22",
+              "protocol": "https",
+              "host": [
+                "reqres",
+                "in"
+              ],
+              "path": [
+                "api",
+                "users",
+                "22"
+              ]
+            },
+            "description": "Generated from cURL: curl -X GET 'https://reqres.in/api/users?page=2' -H 'x-api-key: {{API_KEY}}'"
+          },
+          "response": []
+        },
+        {
+          "name": "DeleteUserById",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://reqres.in/api/users/2",
+              "protocol": "https",
+              "host": [
+                "reqres",
+                "in"
+              ],
+              "path": [
+                "api",
+                "users",
+                "2"
+              ]
+            },
+            "description": "Generated from cURL: curl -X GET 'https://reqres.in/api/users?page=2' -H 'x-api-key: {{API_KEY}}'"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Auth requests",
+      "item": [
+        {
+          "name": "RegisterUser",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"eve.holt@reqres.in\",\r\n  \"password\": \"\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://reqres.in/api/register",
+              "protocol": "https",
+              "host": [
+                "reqres",
+                "in"
+              ],
+              "path": [
+                "api",
+                "register"
+              ]
+            },
+            "description": "Generated from cURL: curl -X GET 'https://reqres.in/api/users?page=2' -H 'x-api-key: {{API_KEY}}'"
+          },
+          "response": []
+        },
+        {
+          "name": "LoginUser",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"eve.holt@reqres.in\",\r\n  \"password\": \"pistol\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://reqres.in/api/login",
+              "protocol": "https",
+              "host": [
+                "reqres",
+                "in"
+              ],
+              "path": [
+                "api",
+                "login"
+              ]
+            },
+            "description": "Generated from cURL: curl -X GET 'https://reqres.in/api/users?page=2' -H 'x-api-key: {{API_KEY}}'"
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "api_key",
+      "value": ""
+    }
+  ]
+}
