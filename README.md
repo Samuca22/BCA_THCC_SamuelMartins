@@ -4,26 +4,16 @@ Constellation Automotive group BCA Take-Home Challenge for 2nd stage interview.
 
 ## Prerequisites
 
-- **Node.js** (v18 or later recommended)
+- **Node.js** (v18 or later)
 - **npm** (included with Node.js)
-- **Java** (JDK 8 or later; only required to view the Allure report)
+- **Java** (optional: used only to view the Allure report)
 
 ### Check if Node.js and npm are installed
 
 ```bash
-node --version   # e.g. v18.x or v20.x
-npm --version    # e.g. 9.x or 10.x
+node --version
+npm --version
 ```
-
-If either command is not found or the version is too old, install or update Node.js (npm is bundled with it).
-
-### Check if Java is installed (for viewing Allure report)
-
-```bash
-java -version   # e.g. openjdk version "17.0.x" or similar
-```
-
-If the command is not found or you need a newer JDK, see below to install Java and set `JAVA_HOME`.
 
 ### Install Node.js (if needed)
 
@@ -54,7 +44,7 @@ After installing, open a new terminal and run `node --version` and `npm --versio
 
 3. **Configure environment variables**
 
-   Copy the example env file and set the values (e.g. API key, UI URL, credentials):
+   Create the .env and copy the example env file and set the values (API key, URLs and credentials):
 
    ```bash
    cp .env.example .env
@@ -63,6 +53,9 @@ After installing, open a new terminal and run `node --version` and `npm --versio
    Edit `.env` with your values. Required for:
    - **API tests:** `API_BASE_URL`, `API_KEY`
    - **UI tests:** `UI_BASE_URL`, `VALID_USERNAME`, `VALID_PASSWORD`
+
+   **! IMPORTANT !** 
+   Check project documentation folder the pdf `Reqres API Key config` file on how to configure: API_KEY, VALID_USERNAME and VALID_PASSWORD
 
 4. **Install Playwright browsers (first time only)**
 
@@ -93,7 +86,14 @@ npx playwright test src/ui/tests/login.spec.js
   npx playwright show-report
   ```
 
-- **Allure report** (optional): raw results are written to `allure-results/` (see `playwright.config.js`). Generate the HTML report then open the generated folder (do not run `allure open allure-results` — that opens raw data and the UI will be blank). Requires **Java** (JDK) and `JAVA_HOME`:
+
+- **Allure report (OPTIONAL)**:
+
+!!IMPORTANT!! 
+For viewing allure reports make sure Java is installed **Java** (JDK) and `JAVA_HOME` env variable is configured.
+If not, follow the instructions in the pdf file inside `documentation/` folder in the project root
+
+To run allure reports, after test runs input the following commands:
 
   ```bash
   npx allure generate allure-results --clean -o allure-report

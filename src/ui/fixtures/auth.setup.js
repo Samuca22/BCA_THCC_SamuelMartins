@@ -23,7 +23,7 @@ setup('authenticate', async ({ page, loginPage, dashboardPage }) => {
 
     await loginPage.login(username, password);
 
-    await expect(page).toHaveURL(/dashboard/, { timeout: 10000 });
+    await expect(page).toHaveURL(/dashboard/);
     await expect(dashboardPage.header.headerTitle).toHaveText('Dashboard');
     await page.context().storageState({ path: authFile });
 });
