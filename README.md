@@ -108,6 +108,8 @@ To run allure reports, after test runs input the following commands:
 
 
 
+
+
 ## Project structure and design decisions
 
 The project follows a structure similar to the suggested in the challenge for better organization and maintenance.
@@ -152,3 +154,5 @@ Below is explained the project structure:
 - **CI pipeline (optional)**
   The git actions pipeline runs only on git push to remote on the "main" branch and upload the playwright reports an artifact.
   All the necessary commands to build and run the project are inside `./.github/workflows/playwright.yml`.
+  
+  - NOTE: The secrets and variables for the CI (ignored in gitignore) are configured in settings `secrets and variables -> Actions` directly in the github repository settings
