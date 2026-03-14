@@ -70,7 +70,7 @@ After installing, open a new terminal and run `node --version` and `npm --versio
 Run ui sanity tests in ui headed mode use:
 
 ```bash
-   npx playwright test --headed --grep '@sanity'
+   npx playwright test --headed --grep '@smoke'
 ```
 
 Run a specific test file:

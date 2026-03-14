@@ -1,0 +1,17 @@
+{
+    "users": [
+        {
+            "name": "Samuel",
+            "job": "Automation Eng."
+        },
+        {
+            "name": "Raquel",
+            "job": "UAT Lead"
+
+        },
+        {
+            "name": "Hannah",
+            "job": "Talent Acquisition"
+        }
+    ]
+}

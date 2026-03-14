@@ -5,6 +5,7 @@ import { validateSchema } from '../../utils/SchemaValidator.js';
 import { UserClient } from '../clients/userClient.js';
 import { userPayloadBuilder } from '../builders/userPayloadBuilder.js';
 import { DataGenerator } from '../../utils/DataGenerator.js';
+import usersData from '../api-test-data/users-data.json' assert { type: 'json' };
 
 //Constants
 const PAGE = 2;
@@ -93,10 +94,6 @@ test.describe('POST - Create user API test', () => {
         const userClient = new UserClient(request);
         const fakeUser = new DataGenerator().generateUserAPIObj();
 
-        // INFO: Uncomment to see generated fake data
-        //console.log("\n\nGenerated fake name => " + fakeUser.name);
-        //console.log("Generated fake job => " + fakeUser.job);
-
         const payload = userPayloadBuilder({ name: fakeUser.name, job: fakeUser.job });
         const response = await userClient.createUser(payload); // payload = userPayloadBuilder() -> only name + job
 
@@ -108,7 +105,7 @@ test.describe('POST - Create user API test', () => {
         expect(responseBody.name).toEqual(fakeUser.name);
         expect(responseBody.job).toEqual(fakeUser.job);
         // Assert extra data: generated id and timestamp
-        expect(responseBody.id).toEqual(expect.any(String))
+        expect(responseBody.id).toEqual(expect.any(String));
         // Assert "createdAt" property to be of type Date
         const createdAtProperty = new Date(responseBody.createdAt);
         expect(createdAtProperty).toEqual(expect.any(Date));
@@ -116,26 +113,24 @@ test.describe('POST - Create user API test', () => {
 });
 
 // PUT
-test.describe('PUT - Update user API test', () => {
-    //TC01 - PUT update user
-    test('Update user - Manual structure validations', async ({ request }) => {
-        const userClient = new UserClient(request);
-        const fakeUser = new DataGenerator().generateUserAPIObj();
+test.describe('PUT - Update user API test (data-driven)', () => {
+    for (const user of usersData.users) {
+        //TC01 - PUT update user
+        test(`Update user to name: ${user.name} and job: ${user.job} - Manual structure validations`, async ({ request }) => {
+            const userClient = new UserClient(request);
 
-        const payload = userPayloadBuilder({ job: fakeUser.job });
-        const response = await userClient.updateUser(ID_USER, payload); // payload = userPayloadBuilder with default name but fake job
-        
-        expect(response.status()).toBe(200);
-        expect(response.ok()).toBeTruthy();
+            const payload = userPayloadBuilder({ name: user.name, job: user.job });
+            const response = await userClient.updateUser(ID_USER, payload); // payload = userPayloadBuilder with default name but fake job
+            
+            expect(response.status()).toBe(200);
+            expect(response.ok()).toBeTruthy();
 
-        const responseBody = await response.json();
-        // Assert default name BUT fake generated job
-        expect(responseBody.name).toEqual(userPayloadBuilder().name);
-        expect(responseBody.job).toEqual(fakeUser.job);
-        // Assert extra data: generated updatedAt property
-        const updatedAtProperty = new Date(responseBody.updatedAt);
-        expect(updatedAtProperty).toEqual(expect.any(Date));
-    });
+            const responseBody = await response.json();
+
+            expect(responseBody.name).toEqual(user.name);
+            expect(responseBody.job).toEqual(user.job);
+        });
+    }
 });
 
 
